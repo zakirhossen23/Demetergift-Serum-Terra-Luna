@@ -1,0 +1,151 @@
+{
+    "name": "demetergift",
+    "version": "0.0.1",
+    "private": true,
+    "engines": {
+        "node": ">=14",
+        "npm": ">=6"
+    },
+    "scripts": {
+        "yarnStart": "./node_modules/.bin/react-app-rewired start",
+        "start": "npx webpack serve --mode development --config webpack.config.ts",
+        "build": "npx webpack --mode development --config webpack.config.ts",
+        "dev": "npx webpack serve --mode development --config webpack.config.ts",
+        "lint": "npx eslint src --ext js,jsx,ts,tsx"
+    },
+    "dependencies": {
+        "@broxus/await-semaphore": "^0.1.4",
+        "@emotion/react": "^11.7.1",
+        "@emotion/styled": "^11.6.0",
+        "@fontsource/roboto": "^4.5.1",
+        "@material-ui/core": "^4.12.3",
+        "@mui/material": "^5.3.1",
+        "@project-serum/sol-wallet-adapter": "^0.2.6",
+        "@project-serum/swap-ui": "^0.2.5",
+        "@types/lodash.isequal": "^4.5.5",
+        "@types/lodash.uniqby": "^4.7.6",
+        "@types/luxon": "^1.27.1",
+        "@types/react": "^17.0.18",
+        "@types/react-dom": "^17.0.9",
+        "@types/react-router-dom": "^5.1.8",
+        "axios": "^0.25.0",
+        "bignumber.js": "^9.0.1",
+        "classnames": "^2.3.1",
+        "fp-ts": "^2.11.1",
+        "https": "^1.0.0",
+        "lightweight-charts": "^3.5.0",
+        "lodash.isequal": "^4.5.0",
+        "lodash.uniqby": "^4.7.0",
+        "luxon": "^2.0.2",
+        "mobx": "^6.3.2",
+        "mobx-react-lite": "^3.2.0",
+        "net": "^1.0.2",
+        "next": "^12.0.8",
+        "next-transpile-modules": "^9.0.0",
+        "normalize.css": "^8.0.1",
+        "notistack": "^2.0.3",
+        "os-browserify": "^0.3.0",
+        "react": "^17.0.2",
+        "react-bootstrap": "^2.1.1",
+        "react-dom": "^17.0.2",
+        "react-intl": "^5.20.9",
+        "react-router-dom": "^5.2.0",
+        "react-waypoint": "^10.1.0",
+        "ton-inpage-provider": "^0.1.18"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.15.0",
+        "@babel/eslint-parser": "^7.15.0",
+        "@babel/plugin-transform-runtime": "^7.15.0",
+        "@babel/preset-env": "^7.15.0",
+        "@babel/preset-react": "^7.14.5",
+        "@babel/preset-typescript": "^7.15.0",
+        "@babel/runtime": "^7.15.3",
+        "@types/copy-webpack-plugin": "^8.0.1",
+        "@types/eslint": "^7.28.0",
+        "@types/file-loader": "^5.0.1",
+        "@types/html-webpack-plugin": "^3.2.6",
+        "@types/mini-css-extract-plugin": "^1.4.3",
+        "@types/node": "^16.6.1",
+        "@types/sass": "^1.16.1",
+        "@types/sass-loader": "^8.0.2",
+        "@types/webpack": "^5.28.0",
+        "@types/webpack-dev-server": "^3.11.5",
+        "@typescript-eslint/eslint-plugin": "^4.29.2",
+        "@typescript-eslint/parser": "^4.29.2",
+        "babel-loader": "^8.2.2",
+        "copy-webpack-plugin": "^9.0.1",
+        "css-loader": "^6.2.0",
+        "eslint": "^7.32.0",
+        "eslint-config-airbnb": "^18.2.1",
+        "eslint-import-resolver-typescript": "^2.4.0",
+        "eslint-import-resolver-webpack": "^0.13.1",
+        "eslint-plugin-babel": "^5.3.1",
+        "eslint-plugin-eslint-comments": "^3.2.0",
+        "eslint-plugin-eslint-plugin": "^3.5.3",
+        "eslint-plugin-import": "^2.24.0",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
+        "eslint-plugin-react": "^7.24.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "eslint-plugin-unused-imports": "^1.1.4",
+        "file-loader": "^6.2.0",
+        "html-webpack-plugin": "^5.3.2",
+        "mini-css-extract-plugin": "^2.2.0",
+        "path": "^0.12.7",
+        "sass": "^1.38.0",
+        "sass-loader": "^12.1.0",
+        "style-loader": "^3.2.1",
+        "stylelint": "^13.13.1",
+        "stylelint-config-prettier": "^8.0.2",
+        "stylelint-config-standard": "^22.0.0",
+        "stylelint-order": "^4.1.0",
+        "ts-node": "^10.2.0",
+        "typescript": "^4.3.5",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.50.0",
+        "webpack-cli": "^4.9.1",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "lint-staged": {
+        "**/*.{js,jsx,ts,tsx}": [
+            "eslint --format=codeframe"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npx lint-staged"
+        }
+    },
+    "peerDependencies": {
+        "@material-ui/core": "^4.12.3",
+        "@material-ui/icons": "^4.11.2",
+        "@material-ui/lab": "^4.0.0-alpha.60",
+        "@project-serum/anchor": "^0.14.0",
+        "@solana/spl-token-registry": "^0.2.229",
+        "@solana/web3.js": "^1.17.1",
+        "material-ui-popup-state": "^1.9.3",
+        "react": "^17.0.2",
+        "react-async-hook": "^3.6.2"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "files": [
+        "dist"
+    ]
+}
