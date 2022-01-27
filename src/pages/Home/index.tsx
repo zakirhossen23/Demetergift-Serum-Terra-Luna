@@ -34,7 +34,7 @@ export default function Home() {
 						width: '100%',
 						margin: '0'
 					}} className="card card-body">
-						<NavLink to="/donation">
+						<NavLink to="/login?url=donation">
 							<div className="card-body">Let’s donate!</div>
 						</NavLink>
 					</div>

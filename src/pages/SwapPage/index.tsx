@@ -107,13 +107,7 @@ function AppInner() {
             alignItems="center"
             className={styles.root}
         >
-            <Button
-                variant="outlined"
-                onClick={() => (!isConnected ? wallet.connect() : wallet.disconnect())}
-                style={{ position: "fixed", right: 24, top: 24 }}
-            >
-                {!isConnected ? "Connect" : "Disconnect"}
-            </Button>
+        
             {tokenList && <Swap provider={provider} tokenList={tokenList} />}
         </Grid>
     );
