@@ -101,6 +101,9 @@ export default (_: any, options: any): WebpackConfig => {
             filename: path.resolve(__dirname, 'dist/donation/auction/index.html'),
             template: 'public/index.html',
             inject: false,
+        }),
+        new webpack.ProvidePlugin({
+            process:"process/browser"
         })
     )
 
@@ -182,7 +185,8 @@ export default (_: any, options: any): WebpackConfig => {
 
     config.resolve = {
         alias: {
-            '@': path.resolve(__dirname, 'src')
+            '@': path.resolve(__dirname, 'src'),
+            process:"process/browser"
         },
 
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss', '.css'],
@@ -201,6 +205,7 @@ export default (_: any, options: any): WebpackConfig => {
             "https": false,
             "stream": false,
             "os": false,
+            "assert": require.resolve("assert"),
             "os-browserify": require.resolve('os-browserify'), //if you want to use this module also don't forget npm i crypto-browserify 
         }
     }

@@ -4,20 +4,17 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import React from 'react';
 import { Connection, SystemProgram, Transaction, clusterApiUrl } from '@solana/web3.js';
-
-import Wallet from "@project-serum/sol-wallet-adapter";
-
+import { useWallet } from '@/stores/WalletService'
 export default function Login() {
-
-    async function loginwithsollet() {
-        let connection = new Connection(clusterApiUrl('devnet'));
-        let providerUrl = 'https://www.sollet.io';
-        let wallet = new Wallet(providerUrl);
-        wallet.on('connect', publicKey => console.log('Connected to ' + publicKey.toBase58()));
-        wallet.on('disconnect', () => console.log('Disconnected'));
-        await wallet.connect();
-
+    const TONwallet = useWallet()
+    async function onClickConnectTON  () {
+       await TONwallet.connect();
+       const urlParams = new URLSearchParams(window.location.search)
+       let redirecturl = urlParams.get("url")?.toString();
+       window.location.href = (redirecturl);
     }
+  
+    
     return (
         <><>
             <Head>
@@ -35,25 +32,22 @@ export default function Login() {
                         <div style={{ margin: "0px 0px 12px 0px" }}>
                             <h4>Please select one of the option to Login</h4>
                         </div>
-                        <div onClick={loginwithsollet} style={{ display: "flex", padding: "10px", borderRadius: "5px", cursor: "pointer", margin: "20px 0" }} className="btn-primary">
-                            <img style={{ height: "45px", width: "46px" }} src="https://polis.metis.io/static/img/metamask-fox.c06f3a3e.svg" />
-                            <div style={{ display: "flex", flexDirection: "column", marginLeft: "11px" }}>
-                                <span style={{ fontWeight: "bolder", fontFamily: "sans-serif" }}>
-                                    Metamask
+
+
+                        <div onClick={onClickConnectTON} style={{ display: "flex", padding: "10px", borderRadius: "5px", cursor: "pointer", margin: "20px 0" }} className="btn-primary">
+                            <img style={{ height: '51px',width: '51px' }} src="https://i.postimg.cc/pXRpptg2/ever.png" />
+                            <div style={{ display: 'flex',flexDirection: 'column',marginLeft: '11px',height: '51px' }}>
+                                <span style={{ fontWeight: 'bolder',padding: '0',fontFamily: 'sans-serif',height: '100%',margin: '-12px 0' }}>
+                                    TON
                                 </span>
-                                <span style={{ fontSize: "15px", fontFamily: "sans-serif" }}>
-                                    Connect With MetaMask
+                                <span style={{ fontSize: '15px',padding: '0',margin: '0',fontFamily: 'sans-serif' }}>
+                                    Connect With Everscale wallet
                                 </span>
                             </div>
                         </div>
-
-
-
-                    </div>
+                      </div>
                 </Col>
-
             </Row>
-
         </></>
     );
 }
