@@ -111,6 +111,10 @@ export default (_: any, options: any): WebpackConfig => {
         }),
         new webpack.ProvidePlugin({
             process:"process/browser"
+        }),
+        new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+            process: 'process/browser',
         })
     )
 
@@ -210,10 +214,12 @@ export default (_: any, options: any): WebpackConfig => {
             "zlib": false,
             "http": false,
             "https": false,
-            "stream": false,
             "os": false,
             "assert": require.resolve("assert"),
             "os-browserify": require.resolve('os-browserify'), //if you want to use this module also don't forget npm i crypto-browserify 
+            crypto: require.resolve('crypto-browserify'),
+            stream: require.resolve('stream-browserify'),
+            buffer: require.resolve('buffer'),
         }
     }
 

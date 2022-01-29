@@ -16,11 +16,15 @@ export async function eventgetbyid(id) {
     var booltrue = true;
     while (booltrue) {
         try {
+            console.log("booltrue")
             await fetch(url, options).then(res => res.json())
                 .then(json => allEvents = json)
+            
         } catch (er) {
+            setTimeout(function() {}, 2000);
             continue;
         }
+        
         break;
     }
 
@@ -34,7 +38,7 @@ export async function eventgetbyid(id) {
 
 }
 
-export async function createEventAPI(EventTitle, EventDescription, EventDate, EventWalletAddressGoal, EventGoal, EventLogo) {
+export async function createEventAPI(EventTitle, EventDescription, EventDate, EventWalletAddressGoal, EventGoal, EventLogo, wallettype) {
     const fetch = require('node-fetch');
     let url = 'https://cors-anyhere.herokuapp.com/https://demetergift-database.vercel.app/api/create';
     let options = {
@@ -43,7 +47,7 @@ export async function createEventAPI(EventTitle, EventDescription, EventDate, Ev
             'Content-Type': 'application/json',
             Accept: 'application/json, text/plain, */*'
         },
-        body: `{"title":"${EventTitle}","description":"${EventDescription}","endDate":"${EventDate}" ,"Goal":${EventGoal},"logolink":"${EventLogo}", "wallet":"${EventWalletAddressGoal}"}`
+        body: `{"title":"${EventTitle}","description":"${EventDescription}","endDate":"${EventDate}" ,"Goal":${EventGoal},"logolink":"${EventLogo}", "wallet":"${EventWalletAddressGoal}","wallettype":"${wallettype}"}`
     };
 
     var allEvents;

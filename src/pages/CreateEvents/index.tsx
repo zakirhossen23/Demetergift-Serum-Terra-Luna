@@ -22,9 +22,9 @@ export default function CreateEvents() {
     const CreateEvent = async () => {
         try {
 
-            const id = await createEventAPI(EventTitle, EventDescription, EventDate, EventWalletAddressGoal, EventGoal, EventLogo);
+            const id = await createEventAPI(EventTitle, EventDescription, EventDate, EventWalletAddressGoal, EventGoal, EventLogo,EventWalletType);
             if (document.getElementById("plugin").checked) {
-                CreatePlugin(`https://${window.location.hostname}/donation/auction?${id}`);
+                await CreatePlugin(`https://${window.location.hostname}/donation/auction?${id}`);
             }
 
             document.querySelectorAll('[href="/donation"]')[0].click()
@@ -53,6 +53,12 @@ export default function CreateEvents() {
         type: 'datetime-local',
         placeholder: 'Event End Date ',
         id: 'enddate',
+    });
+    const [EventWalletType, EventWalletTypeInput] = UseFormInput({
+        defaultValue: "EVER",
+        type: 'select',
+        id: 'walletType',
+        select_options:[{value:"EVER",text:"EVER"},{value:"UST",text:"UST"}]
     });
     const [EventWalletAddressGoal, EventWalletAddressInput] = UseFormInput({
         defaultValue: "",
@@ -93,6 +99,10 @@ export default function CreateEvents() {
                         <div style={{ margin: "18px 0" }}>
                             <h4>Event End Date</h4>
                             {EventDateInput}
+                        </div>
+                        <div style={{ margin: "18px 0" }}>
+                            <h4>EVER Wallet Type</h4>
+                            {EventWalletTypeInput}
                         </div>
                         <div style={{ margin: "18px 0" }}>
                             <h4>EVER Wallet Address</h4>

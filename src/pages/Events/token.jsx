@@ -49,7 +49,7 @@ export async function createBid(Tokenid, UserName, Bidprice) {
         try {
             await fetch(url, options)
                 .then(res => res.json())
-        } catch (er) { continue; }
+        } catch (er) { setTimeout(function() {}, 2000); continue; }
         break;
     }
 }

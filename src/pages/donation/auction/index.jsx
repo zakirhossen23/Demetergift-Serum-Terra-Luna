@@ -29,6 +29,7 @@ export default function Auction() {
     const [selecttitle, setselecttitle] = useState('');
     const [selecttype, setselecttype] = useState('');
     const [selectwallet, setselectwallet] = useState('');
+    const [walletType, setWalletType] = useState('');
     const [selectbid, setselectbid] = useState('');
     const boolTrue = true;
     const [modalShow, setModalShow] = useState(false);
@@ -100,6 +101,7 @@ export default function Auction() {
                     setselectwallet(value.wallet);
                     console.log(value.wallet);
                     setTitle(value.title);
+                    setWalletType(value.wallettype);
                     setgoalusd(formatter.format(Number(value.Goal * 0.371936)));
                     setgoal(Number(value.Goal));
                     setdateleft(LeftDate(value.endDate));
@@ -207,7 +209,7 @@ export default function Auction() {
                             }}>Goal: </h4>
                             <h4 style={{
                                 fontSize: '2.5rem'
-                            }}>$ {goalusd} ({goal} EVER)</h4>
+                            }}>$ {goalusd} ({goal} {walletType})</h4>
                         </div>
                         <div className='TextContainer'>
                             <h4 style={{
@@ -257,7 +259,7 @@ export default function Auction() {
                             <div className='ElementBottomContainer'>
                                 <div style={{ width: "116px" }}>
                                     <h3 style={{ fontSize: '1.5rem' }} className="smallgrey">Current bid</h3>
-                                    <h4 style={{ fontSize: '2.5rem' }} className='bidprice'>$ {listItem.Bidprice} ({listItem.price} EVER)</h4>
+                                    <h4 style={{ fontSize: '2.5rem' }} className='bidprice'>$ {listItem.Bidprice} ({listItem.price} {walletType})</h4>
                                     <h7 style={{ fontSize: '1.5rem' }} name="date" date={date} className="smallgrey">{dateleftBid}</h7>
                                 </div>
                                 <div className='BidAllcontainer' >
@@ -294,13 +296,14 @@ export default function Auction() {
                 onHide={() => {
                     setModalShow(false);
                     // This is a poor implementation, better to implement an event listener
-                    fetchContractData();
+                    AuctionfetchContractData();
                 }}
                 tokenId={selectid}
                 type={selecttype}
                 ToAddress={selectwallet}
                 eventId={eventId}
                 Highestbid={selectbid}
+                walletType = {walletType}
             />
 
             <ViewBidNFTModal
@@ -312,6 +315,7 @@ export default function Auction() {
                 }}
                 id={selectid}
                 title={selecttitle}
+                
             />
             <DonateNFTModal
                 show={CreatemodalShow}
