@@ -28,7 +28,8 @@ export default (_: any, options: any): WebpackConfig => {
     config.entry = {
         '/index': path.resolve(__dirname, 'src/index'),
         "/donation": path.resolve(__dirname, 'src/pages/donation/index'),
-        "/login": path.resolve(__dirname, 'src/pages/login/login'),
+        "/EVERswap":  path.resolve(__dirname, 'src/modules/EVERswap/index'),
+        "/swap": path.resolve(__dirname, 'src/pages/SwapPage/index'),
         "/donation/auction": path.resolve(__dirname, 'src/pages/donation/auction/index'),
     }
 
@@ -98,8 +99,14 @@ export default (_: any, options: any): WebpackConfig => {
             inject: false,
         })
         , new HtmlWebpackPlugin({
-            title: 'Demtergift - Login',
-            filename: path.resolve(__dirname, 'dist/login/index.html'),
+            title: 'Demtergift - Swap',
+            filename: path.resolve(__dirname, 'dist/swap/index.html'),
+            template: 'public/index.html',
+            inject: false,
+        })
+        , new HtmlWebpackPlugin({
+            title: 'Demtergift - Swap',
+            filename: path.resolve(__dirname, 'dist/EVERswap/index.html'),
             template: 'public/index.html',
             inject: false,
         })
@@ -171,6 +178,14 @@ export default (_: any, options: any): WebpackConfig => {
                     'sass-loader',
                 ],
                 include: /node_modules/,
+            },
+            {
+                test: /\.css$/i,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                ],
+                exclude: /node_modules/,
             },
             {
                 test: /\.(png|jpe?g|gif|webp|svg|woff2?)$/,

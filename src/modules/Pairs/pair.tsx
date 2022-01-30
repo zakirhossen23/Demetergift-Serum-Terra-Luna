@@ -14,7 +14,7 @@ import { Stats } from '@/modules/Pairs/components/Stats'
 import { usePairStore } from '@/modules/Pairs/providers/PairStoreProvider'
 import { TogglePoolButton } from '@/modules/Pools/components/TogglePoolButton'
 import { useTokensCache } from '@/stores/TokensCacheService'
-import { getDefaultPerPrice } from '@/modules/Swap/utils'
+import { getDefaultPerPrice } from '@/modules/EVERswap/utils'
 import { concatSymbols, formattedAmount, isGoodBignumber } from '@/utils'
 
 import './pair.scss'

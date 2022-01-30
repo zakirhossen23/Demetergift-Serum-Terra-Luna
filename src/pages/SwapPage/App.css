@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+.MuiTypography-h6 {
+  font-size: 2.0rem !important;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+}
+.MuiInputBase-input {
+
+ font-size: 1.4rem !important;
+}
+.MuiTab-root {
+  font-size: 1.3rem !important;
+}

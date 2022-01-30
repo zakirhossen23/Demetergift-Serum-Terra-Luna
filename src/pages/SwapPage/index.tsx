@@ -4,8 +4,9 @@ import { useState, useEffect, useMemo } from "react";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { Provider } from "@project-serum/anchor";
-// @ts-ignore
+import Choose_Wallet from '@/modals/choose_wallet'
 import Wallet from "@project-serum/sol-wallet-adapter";
+import EVERswap from "@/modules/EVERswap";
 import {
     Signer,
     ConfirmOptions,
@@ -41,7 +42,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AppInner() {
+    if (window.localStorage.getItem("selectedwallet")=="EVER"){
+        window.location.href= "/EVERswap"
+    }
     const styles = useStyles();
+    const [CreatemodalShow, setModalShow] = useState(false);
 
     const [isConnected, setIsConnected] = useState(false);
     const [tokenList, setTokenList] = useState<TokenListContainer | null>(null);
@@ -100,16 +105,41 @@ function AppInner() {
         });
     }, [wallet]);
 
-    return (
+    return (<>
         <Grid
             container
             justify="center"
             alignItems="center"
             className={styles.root}
         >
-        
-            {tokenList && <Swap provider={provider} tokenList={tokenList} />}
+
+            <Button
+                variant="outlined"
+                onClick={() => (setModalShow(true))}
+                style={{position: 'absolute',
+                zIndex: '59',
+                right: '24px',
+                top: '24px',
+                width: '158px',
+                fontSize: '13px',
+                background: 'white' }}
+            >
+                Change wallet
+            </Button>
+            { 
+             tokenList && <Swap provider={provider} tokenList={tokenList} />
+          
+            }
         </Grid>
+        <Choose_Wallet
+            show={CreatemodalShow}
+            onHide={() => {
+                setModalShow(false);
+               
+            }}
+        />
+    </>
+
     );
 }
 

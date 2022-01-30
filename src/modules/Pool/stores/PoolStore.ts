@@ -14,7 +14,7 @@ import ton, {
     Subscriber,
 } from 'ton-inpage-provider'
 
-import { DEFAULT_DECIMALS } from '@/modules/Swap/constants'
+import { DEFAULT_DECIMALS } from '@/modules/EVERswap/constants'
 import {
     checkPair,
     Dex,

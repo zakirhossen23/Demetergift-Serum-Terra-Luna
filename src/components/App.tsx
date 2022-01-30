@@ -20,6 +20,7 @@ import Pairs from '@/pages/pairs'
 import Pair from '@/pages/pairs/item'
 import AddLiquidityPool from '@/pages/pool'
 import Swap from '@/pages/SwapPage'
+import EVERswap from '@/modules/EVERswap'
 import Tokens from '@/pages/tokens'
 import Token from '@/pages/tokens/item'
 import Pools from '@/pages/pools'
@@ -31,7 +32,6 @@ import Home from '@/pages/Home'
 import CreateEvents from '@/pages/CreateEvents'
 import Donation from '@/pages/donation'
 import Auction from '@/pages/donation/auction'
-import Login from '@/pages/login/login'
 import './App.scss'
 
 
@@ -58,9 +58,6 @@ export function App(): JSX.Element {
                             <Route exact path="/donation">
                                 <Donation />
                             </Route>
-                            <Route exact path="/login">
-                                <Login />
-                            </Route>
                             <Route exact path='/donation/auction'>
                                 <Auction />
                             </Route>
@@ -68,7 +65,9 @@ export function App(): JSX.Element {
                             <Route path="/swap">
                                 <Swap />
                             </Route>
-
+                            <Route path="/EVERswap">
+                                <EVERswap />
+                            </Route>
                             <Route exact path={appRoutes.poolList.path}>
                                 <Pools />
                             </Route>
