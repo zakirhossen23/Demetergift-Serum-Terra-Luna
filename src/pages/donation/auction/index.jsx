@@ -36,6 +36,7 @@ export default function Auction() {
     const [ViewmodalShow, setViewModalShow] = useState(false);
 
 
+
     const formatter = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -62,15 +63,43 @@ export default function Auction() {
         return (da.toString() + "d " + h.toString() + "h " + m.toString() + "m " + s.toString() + "s");
     }
     async function AuctionfetchContractData() {
-
         if (id && window.location.pathname == "/donation/auction") {
             console.log("started chekcing");
+            //Terra and Ever currency
+            try { 
+                var terraPrice = 0;
+                var terraCurrencyUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=terra-luna&start=1&limit=1&category=spot&sort=cmc_rank_advanced";
+                const currency_options = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json, text/plain, */*'
+                    },
+                };
+                await fetch(terraCurrencyUrl, currency_options).then(res => res.json())
+                .then(json => terraPrice = json)
+                .catch(err => console.error('error:' + err));
+                terraPrice = terraPrice.data.marketPairs[0].price;
+
+                var everPrice = 0;
+                var everCurrencyUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=Everscale&start=1&limit=1&category=spot&sort=cmc_rank_advanced";
+                
+                await fetch(everCurrencyUrl, currency_options).then(res => res.json())
+                .then(json => everPrice = json)
+                .catch(err => console.error('error:' + err));
+                console.log(everPrice);
+                everPrice = everPrice.data.marketPairs[0].price;
+            } catch (ex) {
+                var terraPrice = 0;
+                var everPrice = 0;
+             }
             while (boolTrue) {
                 try {
                     setEventId(id);
                     const value = await eventgetbyid(id);
                     const arr = [];
-
+                    console.log(value);
+                   
                     const totalTokens = await tokengetbyeventid(id);
 
                     for (let i = 0; i < totalTokens.length; i++) {
@@ -78,13 +107,20 @@ export default function Auction() {
 
                         if (object.name) {
                             var pricedes1 = 0;
-                            try { pricedes1 = formatter.format(Number(object.price * 0.371936)) } catch (ex) { }
+                            try { 
+                                var price2Usd = 0
+                                if(value.wallettype=="Terra"){
+                                    price2Usd = Number(object.price * terraPrice);
+                                }else{
+                                    price2Usd = Number(object.price * everPrice); 
+                                }
+                            } catch (ex) { }
 
                             arr.push({
                                 Id: object.id,
                                 name: object.name,
                                 description: object.description,
-                                Bidprice: pricedes1,
+                                Bidprice: price2Usd,
                                 price: Number(object.price),
                                 type: object.type,
                                 image: object.image,
@@ -102,7 +138,12 @@ export default function Auction() {
                     console.log(value.wallet);
                     setTitle(value.title);
                     setWalletType(value.wallettype);
-                    setgoalusd(formatter.format(Number(value.Goal * 0.371936)));
+                    if(value.wallettype=="Terra"){
+                        setgoalusd(formatter.format(Number(value.Goal * terraPrice)));
+                    }else{
+                        setgoalusd(formatter.format(Number(value.Goal * everPrice)));
+                    }
+                    
                     setgoal(Number(value.Goal));
                     setdateleft(LeftDate(value.endDate));
                     setdate(value.endDate);
@@ -304,6 +345,7 @@ export default function Auction() {
                 eventId={eventId}
                 Highestbid={selectbid}
                 walletType = {walletType}
+            
             />
 
             <ViewBidNFTModal
@@ -328,6 +370,7 @@ export default function Auction() {
                 SelectedTitle={title}
                 enddate={date}
             />
+            
 
         </>
     );

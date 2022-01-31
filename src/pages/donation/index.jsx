@@ -10,6 +10,7 @@ export default function Donation() {
     const [selectedtype, setselectedtype] = useState('');
     const [SelectedTitle, setSelectedTitle] = useState('');
     const [SelectedendDate, setSelectedendDate] = useState('');
+    const [selectedWallet, setSelectedWallet] = useState("");
 
 
     useEffect(() => {
@@ -59,20 +60,58 @@ export default function Donation() {
             console.log(allEvents);
             const totalEvent = allEvents.length;
             const arr = [];
+
+            //Terra and Ever currency
+            try { 
+                var terraPrice = 0;
+                var terraCurrencyUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=terra-luna&start=1&limit=1&category=spot&sort=cmc_rank_advanced";
+                const currency_options = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json, text/plain, */*'
+                    },
+                };
+                await fetch(terraCurrencyUrl, currency_options).then(res => res.json())
+                .then(json => terraPrice = json)
+                .catch(err => console.error('error:' + err));
+                terraPrice = terraPrice.data.marketPairs[0].price;
+
+                var everPrice = 0;
+                var everCurrencyUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=Everscale&start=1&limit=1&category=spot&sort=cmc_rank_advanced";
+                
+                await fetch(everCurrencyUrl, currency_options).then(res => res.json())
+                .then(json => everPrice = json)
+                .catch(err => console.error('error:' + err));
+                console.log(everPrice);
+                everPrice = everPrice.data.marketPairs[0].price;
+
+            
+            } catch (ex) {
+                var terraPrice = 0;
+                var everPrice = 0;
+             }
+
             for (let i = 0; i < Number(totalEvent); i++) {
                 const value = allEvents[i];
                 console.log(value);
                 if (value) {
-                    var pricedes1 = 0;
-                    try { pricedes1 = Number(value.Goal * 0.371936) } catch (ex) { }
+                    var goalPrice2usd = 0;
+                    if(value.wallettype=="Terra"){
+                        goalPrice2usd = Number(value.Goal * terraPrice);
+                    }else{
+                        goalPrice2usd = Number(value.Goal * everPrice); 
+                    }
+                    
 
                     arr.push({
                         eventId: value.id,
                         Title: value.title,
                         Date: value.endDate,
-                        Goalusd: formatter.format(pricedes1),
+                        Goalusd: formatter.format(goalPrice2usd),
                         Goal: value.Goal,
                         logo: value.logolink,
+                        wallettype: value.wallettype
                     });
                 }
                 console.log(value);
@@ -92,6 +131,7 @@ export default function Donation() {
         setselectid(e.target.getAttribute("eventid"));
         setSelectedTitle(e.target.getAttribute("eventtitle"));
         setSelectedendDate(e.target.getAttribute("date"));
+        setSelectedWallet(e.target.getAttribute("wallettype"));
         setselectedtype("NFT");
 
         setModalShow(true);
@@ -172,10 +212,11 @@ export default function Donation() {
                         width: '100%',
                         padding: '38px 18px'
                     }}>
-                        <img src={listItem.logo} style={{
-                            height: '238px',
-                            width: '284px'
-                        }} />
+                        <div style={{width:"33%"}}>
+                            <img src={listItem.logo} style={{
+                                height: '238px',
+                            }} />
+                        </div>
                         <div style={{
                             marginLeft: '50px',
                             display: 'flex',
@@ -187,14 +228,14 @@ export default function Donation() {
                             <h4 style={{ fontSize: '2.5rem' }}>{listItem.Title}</h4>
                             <div style={{ display: "flex", "whiteSpace": "pre-wrap" }}>
                                 <h4 style={{ fontSize: '2.5rem' }}>Goal:  </h4>
-                                <h4 style={{ fontSize: '2.5rem' }}>${listItem.Goalusd} ({listItem.Goal} EVER)</h4>
+                                <h4 style={{ fontSize: '2.5rem' }}>${listItem.Goalusd} ({listItem.Goal} {listItem.wallettype})</h4>
                             </div>
 
                             <div style={{
                                 display: 'flex',
                                 height: '100%',
                                 float: 'right',
-                                alignItems: 'flex-end',
+                                alignItems: 'flex-start',
                                 marginLeft: '0px',
                                 flexDirection: 'column',
                                 width: '100%',
@@ -212,15 +253,15 @@ export default function Donation() {
                                         width: '28em',
                                         float: 'right',
                                         padding: '0px'
-                                    }} eventid={listItem.eventId} date={listItem.Date} eventtitle={listItem.Title} className="card" onClick={activateCreateNFTModal}>
+                                    }} eventid={listItem.eventId} date={listItem.Date} eventtitle={listItem.Title} className="card" wallettype={listItem.wallettype} onClick={activateCreateNFTModal}>
                                         <div eventid={listItem.eventId} date={listItem.Date} eventtitle={listItem.Title} className="card-body" style={{
                                             height: '100%',
                                             paddingTop: '34px'
-                                        }}>
+                                        }} wallettype={listItem.wallettype}>
                                             Donate NFT
                                         </div>
                                     </div>
-                                    <div style={{
+                                    {/* <div style={{
                                         color: 'white',
                                         overflow: 'hidden',
                                         background: '#0BD6BE',
@@ -236,7 +277,7 @@ export default function Donation() {
                                         }}>
                                             Donate Cryptopunk
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <div style={{
                                         color: 'white',
@@ -276,6 +317,7 @@ export default function Donation() {
                 EventID={selectid}
                 type={selectedtype}
                 SelectedTitle={SelectedTitle}
+                selectedWallet = {selectedWallet}
                 enddate={SelectedendDate}
             />
         </>

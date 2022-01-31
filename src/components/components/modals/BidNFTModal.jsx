@@ -7,7 +7,9 @@ import UseFormInput from '../UseFormInput';
 import { useCreateTokenForm } from '@/modules/Builder/hooks/useCreateTokenForm'
 import { useCreateTokenStore } from '@/modules/Builder/stores/CreateTokenStore'
 import { useWallet } from '@/stores/WalletService'
-import { createBid } from '@/pages/Events/token'
+import { createBid,ReduceCategory } from '@/pages/Events/token'
+import { Icon } from '@/components/common/Icon'
+import { getCategoriesbyeventid} from '../../../pages/Events/event'
 
 import {
 	CreateTxFailed,
@@ -30,7 +32,8 @@ export default function BidNFTModal({
 	tokenId,
 	type,
 	Highestbid,
-	walletType
+	walletType,
+	eventId
 }) {
 	const [Alert, setAlert] = useState('');
 	const [Amount, AmountInput] = UseFormInput({
@@ -39,6 +42,7 @@ export default function BidNFTModal({
 	});
 	const wallet = useWallet()
 	console.log(ToAddress);
+	console.log(categories);
 	const creatingTokenForm = useCreateTokenForm()
 
 	//Terra Wallet
@@ -51,6 +55,20 @@ export default function BidNFTModal({
 		alertELM.style = 'contents';
 		setAlert(`Amount cannot be under ${Highestbid} ${walletType}`)
 	}
+	useEffect(async () => {
+		var boolTrue = true;
+		while (boolTrue) {
+			try {
+				const categories = await getCategoriesbyeventid(eventId);
+				console.log("categories for event:");
+				console.log(categories);
+				setCategories(categories);
+				break;
+			}catch(error){
+				continue;
+			}
+		}
+    }, []);
 	async function bidNFT() {
 		if (Number(Amount) < Number(Highestbid)) {
 			activateWarningModal();
@@ -71,7 +89,9 @@ export default function BidNFTModal({
 		}
 		
 		await createBid(tokenId, wallet.account.address, Amount);
-
+		for(var i=0;i<selectedCategory.length;i++){
+			await ReduceCategory(selectedCategory[i]);
+		}
 		console.log(`given ${Amount} highest => ${Highestbid}`)
 
 		window.location.reload();
@@ -98,61 +118,170 @@ export default function BidNFTModal({
 		// 	return;
 		// }
 		console.log(ToAddress);
-		connectedWallet
-		.post({
-			fee: new Fee(1000000, '200000uusd'),
-			msgs: [
-				new MsgSend(connectedWallet.walletAddress, ToAddress, {
-					uusd: 1000000 * Amount,
-				}),
-			],
-		})
-		.then(() => {
-			console.log("test1");
-			
+		if(selectedTerra=="ust"){
+			connectedWallet
+			.post({
+				fee: new Fee(1000000, '200000uusd'),
+				msgs: [
+					new MsgSend(connectedWallet.walletAddress, ToAddress, {
+						uusd: 1000000 * Amount,
+					}),
+				],
+			})
+			.then(() => {
+				console.log("test1");
+				
 
-			console.log(`given ${Amount} highest => ${Highestbid}`)
+				console.log(`given ${Amount} highest => ${Highestbid}`)
 
-			
-		}).then(async ()=>{
-			await createBid(tokenId, connectedWallet.walletAddress, Amount);
-			
+				
+			}).then(async ()=>{
+				await createBid(tokenId, connectedWallet.walletAddress, Amount);
+				
 
-		}).then(()=>{
-			window.location.reload();
-			window.document.getElementsByClassName("btn-close")[0].click();
-		})
-		.catch((error) => {
-			console.log("error:");
-			console.log(error);
-			if (error instanceof UserDenied) {
-			setTxError('User Denied');
-			} else if (error instanceof CreateTxFailed) {
-			setTxError('Create Tx Failed: ' + error.message);
-			} else if (error instanceof TxFailed) {
-			setTxError('Tx Failed: ' + error.message);
-			} else if (error instanceof Timeout) {
-			setTxError('Timeout');
-			} else if (error instanceof TxUnspecifiedError) {
-			setTxError('Unspecified Error: ' + error.message);
-			} else {
-			setTxError(
-				'Unknown Error: ' +
-				(error instanceof Error ? error.message : String(error)),
-			);
-			}
-		});
+			}).then(()=>{
+				window.location.reload();
+				window.document.getElementsByClassName("btn-close")[0].click();
+			})
+			.catch((error) => {
+				console.log("error:");
+				console.log(error);
+				if (error instanceof UserDenied) {
+				setTxError('User Denied');
+				} else if (error instanceof CreateTxFailed) {
+				setTxError('Create Tx Failed: ' + error.message);
+				} else if (error instanceof TxFailed) {
+				setTxError('Tx Failed: ' + error.message);
+				} else if (error instanceof Timeout) {
+				setTxError('Timeout');
+				} else if (error instanceof TxUnspecifiedError) {
+				setTxError('Unspecified Error: ' + error.message);
+				} else {
+				setTxError(
+					'Unknown Error: ' +
+					(error instanceof Error ? error.message : String(error)),
+				);
+				}
+			});
+		}else if(selectedTerra=="luna"){
+			//Terra and Ever currency
+            try { 
+                var luna_currency = 0;
+                var lunaCurrencyUrl = "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/market-pairs/latest?slug=terra-luna&start=1&limit=1&category=spot&sort=cmc_rank_advanced";
+                const currency_options = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json, text/plain, */*'
+                    },
+                };
+                await fetch(lunaCurrencyUrl, currency_options).then(res => res.json())
+                .then(json => luna_currency = json)
+                .catch(err => console.error('error:' + err));
+                luna_currency = luna_currency.data.marketPairs[0].price;
+            } catch (ex) {
+                var luna_currency = 0;
+                var everPrice = 0;
+             }
+			const lunaprice =   (Amount / luna_currency).toFixed(6);
+			console.log("lunaprice");
+			console.log(lunaprice);
+			connectedWallet
+			.post({
+				fee: new Fee(1000000, '200000uusd'),
+				msgs: [
+					new MsgSend(connectedWallet.walletAddress, ToAddress, {
+						uluna: 1000000 * lunaprice,
+					}),
+				],
+			})
+			.then(() => {
+				console.log("test1");
+				
+
+				console.log(`given ${Amount} highest => ${Highestbid}`)
+
+				
+			}).then(async ()=>{
+				await createBid(tokenId, connectedWallet.walletAddress, Amount);
+				
+
+			}).then(()=>{
+				window.location.reload();
+				window.document.getElementsByClassName("btn-close")[0].click();
+			})
+			.catch((error) => {
+				console.log("error:");
+				console.log(error);
+				if (error instanceof UserDenied) {
+				setTxError('User Denied');
+				} else if (error instanceof CreateTxFailed) {
+				setTxError('Create Tx Failed: ' + error.message);
+				} else if (error instanceof TxFailed) {
+				setTxError('Tx Failed: ' + error.message);
+				} else if (error instanceof Timeout) {
+				setTxError('Timeout');
+				} else if (error instanceof TxUnspecifiedError) {
+				setTxError('Unspecified Error: ' + error.message);
+				} else {
+				setTxError(
+					'Unknown Error: ' +
+					(error instanceof Error ? error.message : String(error)),
+				);
+				}
+			});
+		}
+		
+		
 		
 		
 	}
+	const [categories, setCategories] = useState([]);
+	const [selectCoinTypeModal, setSelectCoinTypeModal] = useState(false);
+	const [selectedTerra, setSelectedTerra] = useState("UST/LUNA");
 
 
+	const confirmBidNFTByTerra = () => {
+		setSelectCoinTypeModal(false);
+		bidNFTByTerra();
+	}
 
+	const [allSelected, setAllSelected] = useState(false);
+	const [selectedCategory, setSelectedCategory] = useState([]);
+	const selectCategory = (category_id) =>{
+		var temp_arr = selectedCategory;
+		temp_arr.push(category_id);
+		setSelectedCategory(temp_arr);
+	}
+	const unselectCategory = (category_id) =>{
+		var temp_arr = [];
+		for(var i=0; i<selectedCategory.length;i++){
+			if(selectedCategory[i]!=category_id)
+				temp_arr.push(selectedCategory[i]);
+		}
+		setSelectedCategory(temp_arr);
+	}
 
+	const selectAllCategory = () =>{
+		if(allSelected){	
+			setAllSelected(false);
+			setSelectedCategory([]);
+		}else{
+
+			setAllSelected(true);
+			var temp_arr = [];
+			for(var i=0;i<categories.length;i++){
+				temp_arr.push(categories[i].id)
+			}
+			setSelectedCategory(temp_arr);
+		}
+			
+	}
 	return (
+		<>
 		<Modal
 			show={show}
-			onHide={onHide}
+			onHide={()=>{setSelectedTerra("UST/LUNA"); onHide();}}
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
 		>
@@ -172,9 +301,94 @@ export default function BidNFTModal({
 						{Alert}
 					</div>
 					<Form.Group className="mb-3" controlId="formGroupName">
-						<Form.Label>Bid Amount in {walletType}</Form.Label>
+						<Form.Label>Bid Amount in {(walletType=="Terra")?((selectedTerra=="UST/LUNA")?"UST/LUNA":(selectedTerra=="ust")? "UST":"LUNA"):walletType}</Form.Label>
 						{AmountInput}
 					</Form.Group>
+					<div className='selectCategoryAll'>
+						<h4 style={{marginBottom:"10px"}}>Choose where you want to give support</h4>
+						<div style={{width:"100%",padding:"5px",display:"flex", justifyContent:"center", alignItems:"center",position:"relative",background:"bisque", height:"40px",borderRadius:"5px",marginBottom:"10px"}} onClick={()=>{
+									
+									selectAllCategory();
+								}}>
+							<h4 style={{alignSelf:"center",color:"black"}}>Support in general </h4>
+							{allSelected?
+								<div style={{position:"absolute",right:"10px",top:"-7px"}} >
+									<div style={{
+										marginTop:"10px",
+										display:"flex",
+										width:"32px",
+										height:"32px",
+										justifyContent:"center",
+										flexDirection:"column",
+										alignItems:"center",
+										borderRadius:"16px",
+										background:"#EEF1F4"
+									}}><Icon icon="heartSelected" /></div>
+								</div>:
+								<div style={{position:"absolute",right:"10px",top:"-7px"}} >
+									<div style={{
+										marginTop:"10px",
+										display:"flex",
+										width:"32px",
+										height:"32px",
+										justifyContent:"center",
+										flexDirection:"column",
+										alignItems:"center",
+										borderRadius:"16px",
+										background:"#EEF1F4"
+									}}><Icon icon="heartUnselected" /></div>
+								</div>}
+						</div>
+					</div>
+					<div className='selectCategory' style={{marginLeft:"-10px", marginRight:"-10px", display:"flex", flexDirection:"row",flexWrap:"wrap"}}>
+						{
+							categories.map((category)=>(
+								<div style={{width:"33%",padding:"0 10px", marginBottom:"10px"}} key={category.id}>
+									<div style={{background:"white", padding: "8px 15px",border:"1px solid transparent", borderRadius:"5px",alignItems:"center",}}>
+										<h4 style={{marginBottom:"10px", color:"#151F28", textAlign:"center"}}>{category.title}</h4>
+										<img src={category.image} style={{width:"100%", borderRadius:"5px", height:"94px"}}/>
+										<h5 style={{ color:"#151F28",textAlign:"center",marginTop:"10px", lineHeight:"14px"}}>{category.amount * category.price} USD</h5>
+										<h5 style={{ color:"#151F28",textAlign:"center",lineHeight:"14px"}}>({category.amount} pieces)</h5>
+										{
+											(selectedCategory.find(category.id)!="undefined")?
+											(
+												<div style={{display:"flex", justifyContent:"flex-end"}} onClick={()=>selectCategory(category.id)}>
+													<div style={{
+														marginTop:"10px",
+														display:"flex",
+														width:"32px",
+														height:"32px",
+														justifyContent:"center",
+														flexDirection:"column",
+														alignItems:"center",
+														borderRadius:"16px",
+														background:"#EEF1F4"
+													}}><Icon icon="heartSelected" /></div>
+												</div>
+											):
+											(
+												<div style={{display:"flex", justifyContent:"flex-end"}} onClick={()=>unselectCategory(category.id)}>
+													<div style={{
+														marginTop:"10px",
+														display:"flex",
+														width:"32px",
+														height:"32px",
+														justifyContent:"center",
+														flexDirection:"column",
+														alignItems:"center",
+														borderRadius:"16px",
+														background:"#EEF1F4"
+													}}><Icon icon="heartUnselected" /></div>
+												</div>
+											)
+										}
+										
+									</div>
+								</div>
+							))
+						}
+						
+					</div>
 					<div className="d-grid">
 
 						{(type == "Cryptopunk") ? (
@@ -183,7 +397,12 @@ export default function BidNFTModal({
 									Bid Cryptopunk
 								</Button>
 								):
-								(<Button variant="primary" onClick={bidNFTByTerra}>
+								(<Button variant="primary" onClick={()=>{
+									if(selectedTerra=="UST/LUNA")
+										setSelectCoinTypeModal(true);
+									else
+										bidNFTByTerra();
+									}}>
 								Bid Cryptopunk
 								</Button>) )
 								: ( 
@@ -193,7 +412,12 @@ export default function BidNFTModal({
 									</Button>
 								):
 								(
-									<Button variant="primary" onClick={bidNFTByTerra}>
+									<Button variant="primary" onClick={()=>{
+										if(selectedTerra=="UST/LUNA")
+											setSelectCoinTypeModal(true);
+										else
+											bidNFTByTerra();
+										}}>
 									Bid NFT
 									</Button>
 								)
@@ -203,6 +427,23 @@ export default function BidNFTModal({
 			</Modal.Body>
 
 		</Modal>
-
+		<Modal show={selectCoinTypeModal}
+			onHide={()=>setSelectCoinTypeModal(false)}
+			size='md'
+			centered style={{padding:"20px"}}>
+			<Modal.Header closeButton>
+				Select coin you want to bid with.
+			</Modal.Header>
+			<div style={{margin:"20px", display:"flex", justifyContent:"space-around"}}>
+				<div onClick={()=>{setSelectedTerra("ust");  confirmBidNFTByTerra();}}>
+					<img src='https://s2.coinmarketcap.com/static/img/coins/200x200/7129.png' style={{width:"150px", height:"150px"}}/>
+				</div>
+				<div onClick={()=>{setSelectedTerra("luna");  confirmBidNFTByTerra();}}>
+				
+					<img src='https://assets.coingecko.com/coins/images/8284/large/luna1557227471663.png?1567147072' style={{width:"150px", height:"150px"}}/>
+				</div>
+			</div>					
+		</Modal>
+		</>
 	);
 }

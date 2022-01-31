@@ -12,7 +12,8 @@ export default function DonateNFTModal({
 	type,
 	EventID,
 	SelectedTitle,
-	enddate
+	enddate,
+	selectedWallet
 }) {
 
 
@@ -97,7 +98,7 @@ export default function DonateNFTModal({
 						{descriptionInput}
 					</Form.Group>
 					<Form.Group className="mb-3" controlId="formGroupName">
-						<Form.Label>Opening price in EVER</Form.Label>
+						<Form.Label>Opening price in {selectedWallet}</Form.Label>
 						{priceInput}
 					</Form.Group>
 
@@ -119,7 +120,7 @@ export default function DonateNFTModal({
 
 					}
 
-					<div className="d-grid">
+					<div className="d-grid" style={{marginTop:"20px"}}>
 						<Button variant="primary" onClick={createNFT}>
 							Donate {type}
 						</Button>
@@ -127,5 +128,6 @@ export default function DonateNFTModal({
 				</Form>
 			</Modal.Body>
 		</Modal>
+		
 	);
 }

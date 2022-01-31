@@ -54,6 +54,29 @@ export async function createBid(Tokenid, UserName, Bidprice) {
     }
 }
 
+export async function ReduceCategory(categoryId) {
+    const fetch = require('node-fetch');
+
+    let url = 'https://cors-anyhere.herokuapp.com/https://demetergift-database.vercel.app/api/updatecategory';
+    
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json, text/plain, */*'
+        },
+        body: `{"id":${categoryId}}`
+    };
+    var booltrue = true;
+
+    while (booltrue) {
+        try {
+            await fetch(url, options)
+                .then(res => res.json())
+        } catch (er) { setTimeout(function() {}, 2000); continue; }
+        break;
+    }
+}
 
 
 export async function bidsgetbytokenid(Tokenid) {

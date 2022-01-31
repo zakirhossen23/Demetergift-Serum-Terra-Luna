@@ -49,6 +49,8 @@ export async function createEventAPI(EventTitle, EventDescription, EventDate, Ev
         },
         body: `{"title":"${EventTitle}","description":"${EventDescription}","endDate":"${EventDate}" ,"Goal":${EventGoal},"logolink":"${EventLogo}", "wallet":"${EventWalletAddressGoal}","wallettype":"${wallettype}"}`
     };
+    console.log("options:");
+    console.log(options);
 
     var allEvents;
     var booltrue = true;
@@ -62,6 +64,62 @@ export async function createEventAPI(EventTitle, EventDescription, EventDate, Ev
         break;
     }
     return allEvents.id;
+}
+
+export async function createEventCategoryAPI(eventId, catTitle, catAmount,catPrice,catImg) {
+    const fetch = require('node-fetch');
+    let url = 'https://cors-anyhere.herokuapp.com/https://demetergift-database.vercel.app/api/createcategories';
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json, text/plain, */*'
+        },
+        body: `{"eventid":${eventId},"title":"${catTitle}","price":${catPrice} ,"amount":${catAmount},"image":"${catImg}"}`
+    };
+    console.log("options:");
+    console.log(options);
+
+    var allCategories;
+    var booltrue = true;
+    while (booltrue) {
+        try {
+            await fetch(url, options).then(res => res.json())
+                .then(json => allCategories = json)
+        } catch (er) {
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+export async function getCategoriesbyeventid(eventid) {
+    const fetch = require('node-fetch');
+
+    let url = 'https://cors-anyhere.herokuapp.com/https://demetergift-database.vercel.app/api/categoriesbyid';
+
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json, text/plain, */*'
+        },
+        body: `{"id": ${eventid}}`
+    };
+    var allCategories;
+    var booltrue = true;
+    while (booltrue) {
+        try {
+            await fetch(url, options).then(res => res.json())
+                .then(json => allCategories = json)
+        } catch (er) {
+            continue;
+        }
+        break;
+    }
+
+    return allCategories;
 }
 
 function downloadURI(uri, name) {
