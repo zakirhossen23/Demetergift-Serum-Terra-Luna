@@ -46,8 +46,14 @@ export function Nav(): JSX.Element {
                         Create Events
                     </NavLink>
                 </li>
+                <li>
+                    <a href="/psyoption">
+                        PsyOptions
+                    </a>
+                </li>
             </ul>
-            <Button
+            {window.location.pathname=="/psyoption"?(<></>):(
+   <Button
                 variant="outlined"
                 onClick={() => (setModalShow(true))}
                 style={{
@@ -56,10 +62,11 @@ export function Nav(): JSX.Element {
                     top: '24px',
                     fontSize: '13px',
                     background: 'white'
-                }}
-            >
+                }}>
                 Connect wallets
             </Button>
+            )}
+         
             <LOGINModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}

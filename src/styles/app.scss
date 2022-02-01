@@ -53,7 +53,18 @@
 
     &--large { max-width: 1200px; }
 }
-
+.MuiBox-root-66 {
+    z-index: 0 !important;
+}
+.MuiBox-root-68 {
+    z-index: 0 !important;
+}
+.MuiBox-root-10 {
+    display: flex;
+    top: 24px;
+    right: 24px;
+    position: absolute;
+}
 .section {
     box-sizing: border-box;
     padding: 0;

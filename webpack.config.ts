@@ -28,9 +28,10 @@ export default (_: any, options: any): WebpackConfig => {
     config.entry = {
         '/index': path.resolve(__dirname, 'src/index'),
         "/donation": path.resolve(__dirname, 'src/pages/donation/index'),
-        "/EVERswap":  path.resolve(__dirname, 'src/modules/EVERswap/index'),
+        "/EVERswap": path.resolve(__dirname, 'src/modules/EVERswap/index'),
         "/swap": path.resolve(__dirname, 'src/pages/SwapPage/index'),
         "/donation/auction": path.resolve(__dirname, 'src/pages/donation/auction/index'),
+        "/psyoption": path.resolve(__dirname, 'src/psyoption/pages/mint/mint'),
     }
 
     /*
@@ -116,12 +117,17 @@ export default (_: any, options: any): WebpackConfig => {
             template: 'public/index.html',
             inject: false,
         }),
+        new HtmlWebpackPlugin({
+            title: 'Demtergift - PsyOptions',
+            filename: path.resolve(__dirname, 'dist/psyoption/index.html'),
+            template: 'public/index.html',
+            inject: false,
+        }),
         new webpack.ProvidePlugin({
-            process:"process/browser"
+            process: "process"
         }),
         new webpack.ProvidePlugin({
             Buffer: ['buffer', 'Buffer'],
-            process: 'process/browser',
         })
     )
 
@@ -211,8 +217,7 @@ export default (_: any, options: any): WebpackConfig => {
 
     config.resolve = {
         alias: {
-            '@': path.resolve(__dirname, 'src'),
-            process:"process/browser"
+            '@': path.resolve(__dirname, 'src')
         },
 
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss', '.css'],
@@ -238,6 +243,20 @@ export default (_: any, options: any): WebpackConfig => {
         }
     }
 
+    config.externals = {
+        "node:zlib": "{}",
+        "node:util": "{}",
+        "node:url": "{}",
+        "node:stream": "{}",
+        "node:stream/web": "{}",
+        "node:process": "{}",
+        "node:path": "{}",
+        "node:net": "{}",
+        "node:http": "{}",
+        "node:https": "{}",
+        "node:fs": "{}",
+        "node:buffer": "{}",
+    }
     /*
      * -------------------------------------------------------------
      * Devtool

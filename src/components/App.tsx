@@ -32,6 +32,7 @@ import Home from '@/pages/Home'
 import CreateEvents from '@/pages/CreateEvents'
 import Donation from '@/pages/donation'
 import Auction from '@/pages/donation/auction'
+import Psyoption from '@/psyoption/pages/mint/mint'
 import './App.scss'
 
 
@@ -64,6 +65,9 @@ export function App(): JSX.Element {
 
                             <Route path="/swap">
                                 <Swap />
+                            </Route>
+                            <Route exact path="/psyoption">
+                                <Psyoption />
                             </Route>
                             <Route path="/EVERswap">
                                 <EVERswap />
