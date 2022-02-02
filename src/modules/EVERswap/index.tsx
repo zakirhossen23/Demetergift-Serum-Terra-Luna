@@ -37,6 +37,17 @@ export default function EVERswap(): JSX.Element {
 
     return (<>
      <div className="container container--small">
+
+            <div className="switchContainer">
+                <div style={{ width: '100%', height: '100%' }}>
+                    <div className="Ton-switch-button">
+                        <input className="Ton-switch-button-checkbox" checked onClick={(e)=>window.location.href="/swap"} type="checkbox" />
+                        <label className="Ton-switch-button-label" >
+                            <span className="Ton-switch-button-label-span">Serum</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div className="card">
                 <div className="card__wrap">
                     <header className="card__header">
@@ -173,19 +184,7 @@ export default function EVERswap(): JSX.Element {
             )}
         </div>
         
-        <Button
-                variant="outlined"
-                onClick={() => (setModalShow(true))}
-                style={{ position: 'absolute',
-                zIndex: '59',
-                right: '24px',
-                top: '24px',
-                width: '158px',
-                fontSize: '13px',
-                background: 'white' }}
-            >
-                Change wallet
-            </Button>
+     
             <Choose_Wallet
             show={CreatemodalShow}
             onHide={() => {

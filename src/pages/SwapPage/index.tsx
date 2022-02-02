@@ -20,6 +20,7 @@ import {
     TokenListProvider,
 } from "@solana/spl-token-registry";
 import Swap from "@project-serum/swap-ui";
+import './App.css'
 
 // App illustrating the use of the Swap component.
 //
@@ -42,9 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AppInner() {
-    if (window.localStorage.getItem("selectedwallet")=="EVER"){
-        window.location.href= "/EVERswap"
-    }
+ 
     const styles = useStyles();
     const [CreatemodalShow, setModalShow] = useState(false);
 
@@ -113,29 +112,28 @@ function AppInner() {
             className={styles.root}
         >
 
-            <Button
-                variant="outlined"
-                onClick={() => (setModalShow(true))}
-                style={{position: 'absolute',
-                zIndex: '59',
-                right: '24px',
-                top: '24px',
-                width: '158px',
-                fontSize: '13px',
-                background: 'white' }}
-            >
-                Change wallet
-            </Button>
-            { 
-             tokenList && <Swap provider={provider} tokenList={tokenList} />
-          
+            <div className="switchContainer">
+                <div style={{ width: '100%', height: '100%' }}>
+                    <div className="serum-switch-button">
+                        <input className="serum-switch-button-checkbox" onClick={(e)=>window.location.href="/EVERswap"} type="checkbox" />
+                        <label className="serum-switch-button-label" >
+                            <span className="serum-switch-button-label-span">Serum</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+      
+            {
+                tokenList && <Swap provider={provider} tokenList={tokenList} />
+
             }
         </Grid>
         <Choose_Wallet
             show={CreatemodalShow}
             onHide={() => {
                 setModalShow(false);
-               
+
             }}
         />
     </>

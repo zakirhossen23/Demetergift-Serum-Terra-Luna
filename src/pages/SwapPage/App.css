@@ -1,52 +1,85 @@
-.App {
+
+/*----------------------------------- Swith box ---------------------------------*/
+
+.serum-switch-button {
+  background: rgba(255, 255, 255, 0.56);
+  border-radius: 30px;
+  overflow: hidden;
+  width: 240px;
   text-align: center;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #155fff;
+  position: relative;
+  padding-right: 120px;
+  position: relative;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.serum-switch-button:after {
+color:white !important;
+  
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.serum-switch-button:before {
+  content: "Ton";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  color: black;
+  right: 0;
+ 
+  width: 120px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  z-index: 3;
+  pointer-events: none;
+}
+.serum-switch-button-checkbox {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2;
+}
+.serum-switch-button-checkbox:checked + .serum-switch-button-label:before {
+  transform: translateX(120px);
+  
+  transition: transform 300ms linear;
+}
+.serum-switch-button-checkbox + .serum-switch-button-label {
+  position: relative;
+  padding: 15px 0;
+
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+.serum-switch-button-checkbox + .serum-switch-button-label:before {
+  content: "";
+  background: #fff;
+    pointer-events: none;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 30px;
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+.serum-switch-button-checkbox + .serum-switch-button-label .serum-switch-button-label-span {
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-.MuiTypography-h6 {
-  font-size: 2.0rem !important;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 500;
-  line-height: 1.6;
-  letter-spacing: 0.0075em;
-}
-.MuiInputBase-input {
-
- font-size: 1.4rem !important;
-}
-.MuiTab-root {
-  font-size: 1.3rem !important;
+.switchContainer{
+  width: 100%;
+  display: block;
+  align-items: center;
+  margin: 2px 0;
+  text-align: -webkit-center;
 }
