@@ -28,10 +28,9 @@ export default (_: any, options: any): WebpackConfig => {
     config.entry = {
         '/index': path.resolve(__dirname, 'src/index'),
         "/donation": path.resolve(__dirname, 'src/pages/donation/index'),
-        "/EVERswap": path.resolve(__dirname, 'src/modules/EVERswap/index'),
+        "/EVERswap":  path.resolve(__dirname, 'src/modules/EVERswap/index'),
         "/swap": path.resolve(__dirname, 'src/pages/SwapPage/index'),
         "/donation/auction": path.resolve(__dirname, 'src/pages/donation/auction/index'),
-        "/psyoption": path.resolve(__dirname, 'src/psyoption/pages/mint/mint'),
     }
 
     /*
@@ -114,12 +113,6 @@ export default (_: any, options: any): WebpackConfig => {
         , new HtmlWebpackPlugin({
             title: 'Demtergift - Auction',
             filename: path.resolve(__dirname, 'dist/donation/auction/index.html'),
-            template: 'public/index.html',
-            inject: false,
-        }),
-        new HtmlWebpackPlugin({
-            title: 'Demtergift - PsyOptions',
-            filename: path.resolve(__dirname, 'dist/psyoption/index.html'),
             template: 'public/index.html',
             inject: false,
         }),
@@ -257,6 +250,7 @@ export default (_: any, options: any): WebpackConfig => {
         "node:fs": "{}",
         "node:buffer": "{}",
     }
+
     /*
      * -------------------------------------------------------------
      * Devtool
