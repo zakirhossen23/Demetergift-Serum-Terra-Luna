@@ -120,7 +120,7 @@ export default function Auction() {
                                 Id: object.id,
                                 name: object.name,
                                 description: object.description,
-                                Bidprice: price2Usd,
+                                Bidprice: formatter.format(price2Usd),
                                 price: Number(object.price),
                                 type: object.type,
                                 image: object.image,
